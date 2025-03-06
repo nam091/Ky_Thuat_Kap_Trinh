@@ -2,7 +2,6 @@ import os
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 from geopy.geocoders import Nominatim
-from Select_file_in_folder import select_file_by_number as slf
 
 def get_gps_metadata(image_path):
     try:
@@ -44,16 +43,7 @@ def get_location_from_image_simple(image_path):
 
             geolocator = Nominatim(user_agent="image_location_finder")
             location = geolocator.reverse((lat, lon), language='vi', exactly_one=True)
-            return location.address if location else "Không tìm thấy địa chỉ"
+            return location.address
         except Exception:
             return "Lỗi xử lý địa điểm"
-    return "Thiếu thông tin tọa độ"
-
-if __name__ == "__main__":
-    path_folder = r"img"
-    selected_file = slf(path_folder)
-    for item in selected_file.keys():
-        image_path = selected_file[item]
-        file_name = os.path.basename(image_path)
-        address = get_location_from_image_simple(image_path)
-        print(f"Địa chỉ từ ảnh {file_name}: {address}")
+    return "Thiếu thông tin tọa độ"   
