@@ -29,7 +29,6 @@ def extract_image(image_path):
                     for t in exif_data[key]:
                         sub_tag = GPSTAGS.get(t, t)
                         gps_info[sub_tag] = exif_data[key][t]
-            gps_info = {}
             not_format_gps = {}
             for key, value in gps_info.items():
                 if isinstance(value, bytes):
@@ -38,11 +37,11 @@ def extract_image(image_path):
                     except:
                         value = f"Binary data of length {len(value)}"
                 gps_info[key] = value
-            not_format_gps = gps_info
+            not_format_gps = gps_info.copy()
                 
             if 'GPSLatitude' in gps_info and 'GPSLongitude' in gps_info:
-                gps_info['GPSLatitude'] = format_gps_value(gps_info['GPSLatitude']) #GPSLatitude: (21.0, 2.0, 10.05571462)
-                gps_info['GPSLongitude'] = format_gps_value(gps_info['GPSLongitude']) #GPSLongitude: (105.0, 51.0, 0.0)
+                gps_info['GPSLatitude'] = format_gps_value(gps_info['GPSLatitude'])
+                gps_info['GPSLongitude'] = format_gps_value(gps_info['GPSLongitude'])
             metadata['GPSInfo'] = gps_info
     
         metadata['Filename'] = os.path.basename(image_path)
@@ -56,8 +55,8 @@ def extract_image(image_path):
         return None
 
 def format_gps_value(value):
-        degrees, minutes, seconds = value
-        return f"{degrees} deg {minutes}' {seconds:.2f}\""
+    degrees, minutes, seconds = value
+    return f"{degrees} deg {minutes}' {seconds}\""
     
 def decimal_coords(degrees, minutes, seconds, direction):
     decimal_degree = degrees + minutes / 60 + seconds / 3600

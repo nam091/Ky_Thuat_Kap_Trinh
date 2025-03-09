@@ -1,6 +1,5 @@
 import argparse
 import os
-from Real_Location import get_location_from_image_simple as get_location
 from Metadata import extract_image
 
 if __name__ == "__main__":
@@ -17,12 +16,15 @@ if __name__ == "__main__":
         else:
             metadata = extract_image(image_path)
             
-            print(f"Metadata for {image_path}:")
-            for key in metadata:
-                if isinstance(key, str):  # Ensure the key is a string
-                    if isinstance(metadata[key], dict):
-                        print(f"{key}:")
-                        for subkey in metadata[key]:
-                            print(f"  {subkey}: {metadata[key][subkey]}")
-                    else:
-                        print(f"{key}: {metadata[key]}")
+            print(f"============ Metadata for {image_path}: ============")
+            if metadata is None:
+                print(f"Error: Failed to extract metadata from {image_path}")
+            else:
+                for key in metadata:
+                    if isinstance(key, str):  # Ensure the key is a string
+                        if isinstance(metadata[key], dict):
+                            print(f"{key}:")
+                            for subkey in metadata[key]:
+                                print(f"  {subkey}: {metadata[key][subkey]}")
+                        else:
+                            print(f"{key}: {metadata[key]}")
