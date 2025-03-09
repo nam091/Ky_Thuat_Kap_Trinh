@@ -2,23 +2,7 @@ import os
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 from geopy.geocoders import Nominatim
-
-def get_gps_metadata(image_path):
-    try:
-        image = Image.open(image_path)
-        exif_data = image._getexif()
-        if exif_data:
-            for tag_id in exif_data:
-                tag = TAGS.get(tag_id, tag_id)
-                if tag == 'GPSInfo':
-                    gps_info = {}
-                    for gps_tag_id in exif_data.get(tag_id):
-                        gps_tag = GPSTAGS.get(gps_tag_id, gps_tag_id)
-                        gps_info[gps_tag] = exif_data.get(tag_id).get(gps_tag_id)
-                    return gps_info
-        return None
-    except Exception:
-        return None
+from Metadata import extract_image
 
 def decimal_coords(degrees, minutes, seconds, direction):
     decimal_degree = degrees + minutes / 60 + seconds / 3600
@@ -27,7 +11,7 @@ def decimal_coords(degrees, minutes, seconds, direction):
     return decimal_degree
 
 def get_location_from_image_simple(image_path):
-    gps_metadata = get_gps_metadata(image_path)
+    gps_metadata = extract_image(image_path)
     if not gps_metadata:
         return "Không có thông tin GPS"
 

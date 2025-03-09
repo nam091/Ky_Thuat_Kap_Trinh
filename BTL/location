@@ -1,0 +1,12 @@
+from geopy.geocoders import Nominatim
+
+def gps_extract_location(latitude, longitude):
+    geolocator = Nominatim(user_agent="dia_chi_ung_dung_cua_ban")
+    toa_do = str(latitude) + "," + str(longitude)
+    location = geolocator.reverse(toa_do, exactly_one=True)
+    if location:
+        return location.address
+    else:
+        return "Không tìm thấy địa chỉ"
+    
+print(gps_extract_location(19.33423, 72.090834))

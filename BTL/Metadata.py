@@ -1,63 +1,86 @@
 from PIL import Image
-from PIL.ExifTags import TAGS
+from PIL.ExifTags import TAGS, GPSTAGS
 import os
 from datetime import datetime
-import xml.etree.ElementTree as ET
-from File_Format import File_Format_Folder
-
-def extract_svg(svg_path):
-    try:
-        tree = ET.parse(svg_path)
-        root = tree.getroot()
-
-        metadata = {
-            'Filename': os.path.basename(svg_path),
-            'File Type': 'SVG',
-            'Creation DateTime': datetime.fromtimestamp(os.path.getctime(svg_path)).strftime('%Y-%m-%d %H:%M:%S'),
-            'Width': root.get('width'),
-            'Height': root.get('height'),
-            'ViewBox': root.get('viewBox')
-        }
-        return metadata
-        
-    except Exception as e:
-        print(f"Error extracting SVG metadata: {str(e)}")
-        return None
+from geopy.geocoders import Nominatim
 
 def extract_image(image_path):
-    # Xác định kiểu file để dễ dàng xử lý
     try:
-        file_extension = File_Format_Folder(image_path)
-        if "error" in file_extension:
-                print(f"Lỗi xác định kiểu file cho {file_extension['file_name']}: {file_extension['error']}")
-                return None
-        file_extension = file_extension['Dinh_dang']
+        file_extension = os.path.basename(image_path).split('.')[-1]
+        if file_extension.upper() not in ['JPG', 'JPEG', 'PNG']:
+            return f"Unsupported file format: {file_extension}"
         
-        # Xử lý các kiểu file khác nhau
-        if file_extension.upper() == 'SVG':
-            return extract_svg(image_path)
-        
-        elif file_extension.upper() in ['JPG', 'JPEG', 'PNG']:
-            img = Image.open(image_path)
-            exif_data = img.getexif()
-            metadata = {}
-            
-            for tagid in exif_data:
+        img = Image.open(image_path)
+        exif_data = img._getexif()
+        metadata = {}
+        if exif_data:
+            for tagid, value in exif_data.items():
                 tagname = TAGS.get(tagid, tagid)
-                value = exif_data.get(tagid)
                 if isinstance(value, bytes):
                     try:
                         value = value.decode()
                     except:
                         value = f"Binary data of length {len(value)}"
                 metadata[tagname] = value
-            metadata['Filename'] = os.path.basename(image_path)
-            metadata['File Type'] = image_path.split('.')[-1].upper()
-            metadata['Creation DateTime'] = datetime.fromtimestamp(os.path.getctime(image_path)).strftime('%Y-%m-%d %H:%M:%S')
-            return metadata
-        else:
-            return f"Unsupported file format: {file_extension}"
+            gps_info = {}
+            for key in exif_data:
+                tag = TAGS.get(key)
+                if tag == 'GPSInfo':
+                    for t in exif_data[key]:
+                        sub_tag = GPSTAGS.get(t, t)
+                        gps_info[sub_tag] = exif_data[key][t]
+            gps_info = {}
+            not_format_gps = {}
+            for key, value in gps_info.items():
+                if isinstance(value, bytes):
+                    try:
+                        value = value.decode()
+                    except:
+                        value = f"Binary data of length {len(value)}"
+                gps_info[key] = value
+            not_format_gps = gps_info
+                
+            if 'GPSLatitude' in gps_info and 'GPSLongitude' in gps_info:
+                gps_info['GPSLatitude'] = format_gps_value(gps_info['GPSLatitude']) #GPSLatitude: (21.0, 2.0, 10.05571462)
+                gps_info['GPSLongitude'] = format_gps_value(gps_info['GPSLongitude']) #GPSLongitude: (105.0, 51.0, 0.0)
+            metadata['GPSInfo'] = gps_info
+    
+        metadata['Filename'] = os.path.basename(image_path)
+        metadata['File Type'] = file_extension.upper()
+        metadata['Creation DateTime'] = datetime.fromtimestamp(os.path.getctime(image_path)).strftime('%Y-%m-%d %H:%M:%S')
+        metadata['Location'] = get_location_from_image_simple(not_format_gps)
+        return metadata
             
     except Exception as e:
         print(f"Error extracting metadata: {str(e)}")
         return None
+
+def format_gps_value(value):
+        degrees, minutes, seconds = value
+        return f"{degrees} deg {minutes}' {seconds:.2f}\""
+    
+def decimal_coords(degrees, minutes, seconds, direction):
+    decimal_degree = degrees + minutes / 60 + seconds / 3600
+    if direction in ('S', 'W'):
+        decimal_degree *= -1
+    return decimal_degree
+
+def get_location_from_image_simple(gps_metadata):
+    if not gps_metadata:
+        return "Không có thông tin GPS"
+    lat_info = gps_metadata.get('GPSLatitude')
+    lon_info = gps_metadata.get('GPSLongitude')
+    lat_dir = gps_metadata.get('GPSLatitudeRef', 'N')
+    lon_dir = gps_metadata.get('GPSLongitudeRef', 'E')
+
+    if lat_info and lon_info:
+        try:
+            lat = decimal_coords(*lat_info, lat_dir)
+            lon = decimal_coords(*lon_info, lon_dir)
+
+            geolocator = Nominatim(user_agent="image_location_finder")
+            location = geolocator.reverse((lat, lon), language='vi', exactly_one=True)
+            return location.address if location else "Không tìm thấy địa chỉ"
+        except Exception as e:
+            return f"Lỗi xử lý địa điểm: {str(e)}"
+    return "Thiếu thông tin tọa độ"

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Báo cáo ELA</title>
+</head>
+<body>
+    <h1>Báo cáo Phân tích Mức Lỗi (ELA)</h1>
+    <p><b>Thời gian tạo báo cáo:</b> {{report_date}}</p>
+    <hr/>
+    <h2>Tham số</h2>
+    <ul>
+        <li><b>Chất lượng JPEG:</b> {{quality}}</li>
+        <li><b>Hệ số tỷ lệ:</b> {{scale}}</li>
+    </ul>
+    <hr/>
+    <h2>Ảnh Gốc</h2>
+    <ul>
+        <li><b>Đường dẫn:</b> {{original_path}}</li>
+        <li><b>MD5 Hash:</b> {{md5_original}}</li>
+        <li><b>SHA-1 Hash:</b> {{sha1_original}}</li>
+    </ul>
+    <hr/>
+    <h2>Ảnh ELA</h2>
+    <ul>
+        <li><b>Đường dẫn:</b> {{ela_path}}</li>
+        <li><b>MD5 Hash:</b> {{md5_ela}}</li>
+        <li><b>SHA-1 Hash:</b> {{sha1_ela}}</li>
+    </ul>
+    <hr/>
+    <p><i>Báo cáo được tạo bởi script Python ELA.</i></p>
+</body>
+</html>
