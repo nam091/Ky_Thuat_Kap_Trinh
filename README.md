@@ -3,10 +3,10 @@
 
 **TẢI REPO**
 - Để chạy file code không lỗi và đầy đủ file trước tiên cài phải cài github
-- Mở `PowerShell`, chạy lệnh sau
-  ```
-  winget install --id Git.Git -e --source winget
-  ```
+- Mở `PowerShell`, chạy lệnh sau:
+```
+winget install --id Git.Git -e --source winget
+```
 
 **HOW TO RUN CODE?**
 ```
