@@ -1,0 +1,37 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Error Level Analysis Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1 { color: #333; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+        </style>
+    </head>
+    <body>
+        <h1>Error Level Analysis Report</h1>
+        <h2>Operation: Error Level Analysis Plugin</h2>
+        <p><strong>Summary:</strong> Tính toán Error Level Analysis để phát hiện các khu vực bị chỉnh sửa trong ảnh JPEG.</p>
+        <p><strong>Details:</strong> "Error Level Analysis" phân tích ảnh để tìm các khu vực bị thay đổi nhân tạo, dựa trên sự khác biệt từ quá trình nén JPEG.</p>
+        
+        <h3>Parameters:</h3>
+        <table>
+            <tr><th>Name</th><th>Description</th><th>Value</th></tr>
+            <tr><td>Quality</td><td>Chất lượng JPEG khi lưu lại ảnh</td><td>88</td></tr>
+            <tr><td>Scale</td><td>Hệ số phóng đại sự khác biệt</td><td>50</td></tr>
+            <tr><td>Original Image Path</td><td>Đường dẫn ảnh gốc</td><td>F:/KTTL_BTL/BTL/img/fake1.jpg</td></tr>
+            <tr><td>MD5 Hash (Original)</td><td>Hash MD5 của ảnh gốc</td><td>f64611c2e3ba0c15dcb5420bc7be6dd8</td></tr>
+            <tr><td>SHA-1 Hash (Original)</td><td>Hash SHA-1 của ảnh gốc</td><td>05eac6f8800c6aed0e9ea552583ac09b30f2321c</td></tr>
+            <tr><td>ELA Image Path</td><td>Đường dẫn ảnh ELA</td><td>ela_result.png</td></tr>
+            <tr><td>MD5 Hash (ELA)</td><td>Hash MD5 của ảnh ELA</td><td>2d2c06921b3d1f2641b13b365a9e582b</td></tr>
+            <tr><td>SHA-1 Hash (ELA)</td><td>Hash SHA-1 của ảnh ELA</td><td>fbbd4e26748617ada7264f54cda1e8a1d05af581</td></tr>
+        </table>
+        
+        <h3>References:</h3>
+        <p>Neal Krawetz, A Picture's Worth - Digital Image Analysis and Forensics, Black Hat Briefings, USA 2007.</p>
+    </body>
+    </html>
+    
