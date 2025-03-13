@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Level Analysis Report</title>
+    <style>
+        body {{font-family: Arial, sans-serif ; margin: 20px; }}
+        h1 {{ color: #333; }}
+        table {{ border-collapse: collapse; width: 100%; }}
+        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+        th {{ background-color: #f2f2f2; }}
+        .image-comparison {{ display: flex; justify-content: center; gap: 20px; margin: 20px 0; }}
+        .image-comparison img {{ max-width: 45%; height: auto; }}
+    </style>
+</head>
+<body>
+    <h1>Error Level Analysis Report</h1>
+    <p><strong>Summary:</strong> Tính toán Error Level Analysis để phát hiện các khu vực bị chỉnh sửa trong ảnh JPEG.</p>
+    <p><strong>Details:</strong> "Error Level Analysis" phân tích ảnh để tìm các khu vực bị thay đổi nhân tạo, dựa trên sự khác biệt từ quá trình nén JPEG.</p>
+    
+    <h3>Image Comparison:</h3>
+    <div class="image-comparison">
+        <img src="{original_name}" alt="Original Image">
+        <img src="{ela_path}" alt="ELA Result">
+    </div>
+    <p style="text-align: center;"> {ratio} </p>
+    
+    <h3>Parameters:</h3>
+    <table>
+        <tr><th>Name</th><th>Description</th><th>Value</th></tr>
+        <tr><td>Quality</td><td>Chất lượng JPEG khi lưu lại ảnh</td><td>{quality}</td></tr>
+        <tr><td>Scale</td><td>Hệ số phóng đại sự khác biệt</td><td>{scale}</td></tr>
+        <tr><td>Original Image Path</td><td>Đường dẫn ảnh gốc</td><td>{original_path}</td></tr>
+        <tr><td>MD5 Hash (Original)</td><td>Hash MD5 của ảnh gốc</td><td>{md5_original}</td></tr>
+        <tr><td>SHA-1 Hash (Original)</td><td>Hash SHA-1 của ảnh gốc</td><td>{sha1_original}</td></tr>
+        <tr><td>ELA Image Path</td><td>Đường dẫn ảnh ELA</td><td>{ela_path}</td></tr>
+        <tr><td>MD5 Hash (ELA)</td><td>Hash MD5 của ảnh ELA</td><td>{md5_ela}</td></tr>
+        <tr><td>SHA-1 Hash (ELA)</td><td>Hash SHA-1 của ảnh ELA</td><td>{sha1_ela}</td></tr>
+    </table>
+    
+    <h3>NHÓM 7:</h3>
+    <p> Lã Phương Nam - Nguyễn Thanh Quyết - Nguyễn Hồng Phong </p>
+</body>
+</html>

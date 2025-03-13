@@ -1,0 +1,6 @@
+exif>=1.6.0
+plum-py>=0.8.7
+pillow>=10.4.0
+argparse>=1.4.0
+numpy>=1.26.4
+opencv-python>=4.11.0.86

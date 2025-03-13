@@ -3,7 +3,8 @@
 
 **HOW TO RUN CODE?**
 ```
-Python .\Main.py .\img\org1.jpg
+Python .\Steganography.py -e <Image path>
+Python .\Steganography.py -d <Image path>
 ```
 
 - Thay thế `.\img\org1.jpg` thành địa chỉ file ảnh mong muốn
